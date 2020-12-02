@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Search from '../Search';
-import loading from '../../icons/480.gif'
+import loading from '../../icons/480.gif';
+import './breeds-list.scss';
 
 interface breeds {
 	[key: string]: string[];
@@ -87,15 +88,22 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 	} else  {
 
 		return (
-		  <div>
-			<Search onChange={ filterBreeds }/>
-			{filteredBreeds.map((breedInfo, index) => {
-			  return (
-				<div key={index}>
-				  <button onClick={ handleClick } value={ breedInfo.URLFragment }>{breedInfo.displayName}</button>
-				</div>
-			  );
-			})}
+		  <div className='breed-list-container'>
+			  <div className='search-container'>
+				  <h1>Welcome to doggie search</h1>
+			 	 <Search onChange={ filterBreeds }/>
+				  <p>Click on a breed to see some lovely doggies</p>
+			  </div>
+			
+			<div className='breed-list'>
+				{filteredBreeds.map((breedInfo, index) => {
+				return (
+					<div key={index} className='breed-button-container'>
+						<button onClick={ handleClick } value={ breedInfo.URLFragment }>{breedInfo.displayName}</button>
+					</div>
+				);
+				})}
+			</div>
 		  </div>
 		);
 	}

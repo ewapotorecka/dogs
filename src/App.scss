@@ -1,0 +1,11 @@
+$primary-color: #ecf0f1;
+
+.app-container {
+	max-width: 100vw;
+	display: flex;
+	background-color: $primary-color;
+	h1 {
+		text-align: center;
+	}
+}
+

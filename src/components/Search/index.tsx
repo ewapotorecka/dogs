@@ -9,8 +9,8 @@ export default function Search( { onChange }: any) {
 		onChange( event.target.value);
 	}
 	return (
-		<div>
-			<input type='text' placeholder='Type dog breed name' onChange={handleChange} value={inputValue}/>
-		</div>
+		
+			<input type='text' placeholder='Search...' onChange={handleChange} value={inputValue}/>
+		
 	)
 };

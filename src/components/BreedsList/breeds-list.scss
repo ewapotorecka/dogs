@@ -1,0 +1,64 @@
+
+$light-blue: #3498db;
+$main-font: 'Nerko One', cursive;
+$secondary-font: 'Montserrat', sans-serif;
+@use 'base';
+
+.breed-list-container {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.search-container {
+	width: 100vw;
+    text-align: center;
+	border-bottom: 2px solid #000000;
+	font-family: 'Nerko One', cursive;
+	font-size: 1.2em;
+    position: fixed;
+	background-color: $light-blue;
+	input {
+		margin: 10px auto;
+		font-size: 0.8em;
+		font-family: $secondary-font;
+		background-color: white;
+		padding: 10px;
+		width: 300px;
+		border-radius: 4px;
+		border-style: none;
+		border: 1px solid black;
+	}
+	p {
+		font-size: 1.2em;
+	}
+}
+
+.breed-list {
+	width: 90vw;
+	margin:250px auto 10px auto ;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	
+}
+
+.breed-button-container {
+	margin: 10px;
+	
+	button {
+		font-size: 1.6em;
+		font-family: $main-font;
+		cursor: pointer;
+		width: fit-content;
+		height: 70px;
+		padding: 10px 40px;
+		background-color: white;
+		border: 3px solid $light-blue;
+		border-radius: 25px;
+	}
+	button:hover {
+		background-color: $light-blue;
+		color: white;
+	}
+}
