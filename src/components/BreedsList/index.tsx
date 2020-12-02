@@ -1,46 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import Search from '../Search';
+import loading from '../../icons/480.gif'
 
 interface breeds {
 	[key: string]: string[];
 };
+
+interface breedInfo {
+	displayName: string,
+	URLFragment: string
+}
 
 interface BreedListProps {
 	onBreedChoice: ( breed: string ) => void;
 }
 
 export default function BreedsList( {onBreedChoice}: BreedListProps ){
-	const [ breeds, setBreeds ] = useState<breeds>({});
-	const [ breedNames, setBreedNames ] = useState<string[]>();
-	const [ filteredBreeds, setFiteredBreeds ] = useState([]);
+	const [ breedInfo, setBreedInfo ] = useState<breedInfo[]>([])!;
+	const [ filteredBreeds, setFilteredBreeds ] = useState<breedInfo[]>([])!;
 	const [ isLoaded, setIsLoaded ] = useState( false );
 	const [ error, setError ] = useState<Error | null>( null );
 
-	const createVariationNames = (breed: string, subBreeds: string[] ): string[] => {
-		const variationNames = [];
+	const createSubBreedInfo = (breed: string, subBreeds: string[] ): breedInfo[] => {
+		const subBreedInfo = [];
 
 		for (const subBreed of subBreeds ) {
-			variationNames.push(`${subBreed}/${breed}`);
+			subBreedInfo.push( {
+				displayName: `${capitalize(subBreed)} ${capitalize(breed)}`,
+				URLFragment: `${breed}/${subBreed}`
+			} );
 		}
 
-		return variationNames;
+		return subBreedInfo;
 	};
-	const createBreedNamesArray = ( data: breeds ) => {
-		const breedNames: string[] = [];
-		
+
+	const createBreedsInfo = ( data: breeds ) => {
+		const breedsInfo: breedInfo[] = [];
 
 		for (const dogBreed in data) {
-		  if (data[dogBreed].length > 0) {
-			  console.log( data[dogBreed])
-			breedNames.push(...createVariationNames(dogBreed, data[ dogBreed ]));
-		  } else {
-			breedNames.push(dogBreed);
+			if (data[dogBreed].length > 0) {
+			  breedsInfo.push(...createSubBreedInfo(dogBreed, data[ dogBreed ]));
+			} else {
+				breedsInfo.push({
+					displayName: capitalize( dogBreed ),
+					URLFragment: dogBreed
+				} );
+			}
 		  }
-		}
 
-		return breedNames;
-	};
-	
+		  return breedsInfo;
+	}
 
 	const handleClick = ( e: React.MouseEvent<HTMLElement> ) => {
 		const clickedBreed = e.currentTarget.getAttribute( 'value' )!;
@@ -48,12 +57,21 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 		onBreedChoice( clickedBreed );
 	}
 
+	const filterBreeds = ( phrase: string) => {
+		const result = breedInfo.filter( element => {
+			return element.displayName.toLowerCase().startsWith( phrase.toLocaleLowerCase() )
+		} );
+
+		setFilteredBreeds( result );
+	}
+
 	useEffect( () => {
 		fetch( 'https://dog.ceo/api/breeds/list/all' )
 			.then( response => response.json() )
-			.then( data => {
-				setBreeds( data.message );
-				setBreedNames( createBreedNamesArray( data.message ) );
+			.then( data => createBreedsInfo( data.message ))
+			.then( breedsInfo => {
+				setBreedInfo(breedsInfo );
+				setFilteredBreeds(breedsInfo);
 				setIsLoaded( true );
 			} )
 			.catch( error => {
@@ -65,31 +83,24 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 	if ( error ) {
 		return <div>{ error.message }</div>
 	} else if ( !isLoaded ) {
-		return <div>Loading...</div>
-	} else if ( breedNames ) {
-		// const breedNames: string[] = [];
-
-		// for (const dogBreed in breeds) {
-		//   if (hasVariations(dogBreed)) {
-		// 	breedNames.push(...createVariationNames(dogBreed));
-		//   } else {
-		// 	breedNames.push(dogBreed);
-		//   }
-		// }
+		return <div><img src={loading} alt="loading"/></div>
+	} else  {
 
 		return (
 		  <div>
-			<Search />
-			{breedNames.map((breed, index) => {
+			<Search onChange={ filterBreeds }/>
+			{filteredBreeds.map((breedInfo, index) => {
 			  return (
 				<div key={index}>
-				  <button onClick={ handleClick } value={ breed }>{breed}</button>
+				  <button onClick={ handleClick } value={ breedInfo.URLFragment }>{breedInfo.displayName}</button>
 				</div>
 			  );
 			})}
 		  </div>
 		);
-	} else {
-		return <div></div>
 	}
 };
+
+const capitalize = ( name: string ) => {
+	return name[0].toUpperCase() + name.slice( 1 );
+}

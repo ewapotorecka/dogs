@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import loading from '../../icons/480.gif';
 
 type BreedProps = {
 	breed: string,
@@ -25,7 +26,7 @@ export default function Breed( { breed, onBack }: BreedProps ) {
 
 	return(
 		<div>
-			{ !isLoaded && <p>Loading...</p> }
+			{ !isLoaded && <p><img src={loading} alt="loading"/></p> }
 			{ error && <p>{ error.message }</p>}
 			{
 				<div>
