@@ -9,7 +9,7 @@ function App() {
 	if ( selectedBreed ) {
 		return <Breed breed={ selectedBreed} onBack={ () => setSelectedBreed('')}/>
 	} else {
-		return <BreedsList/>
+		return <BreedsList onBreedChoice={setSelectedBreed}/>
 	}
 }
 
