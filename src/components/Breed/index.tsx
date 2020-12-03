@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import loading from '../../icons/480.gif';
+import { breedInfo } from '../../interfaces/breedInfo';
 import { ReactComponent as Back } from '../../icons/return.svg';
 import { ReactComponent as Next } from '../../icons/next.svg';
 import { ReactComponent as Prev } from '../../icons/prev.svg';
 import './breed.scss';
 
 type BreedProps = {
-	breed: string,
+	breed: breedInfo,
 	onBack: any
 };
 
@@ -33,7 +33,7 @@ export default function Breed( { breed, onBack }: BreedProps ) {
 	}
 
 	useEffect( () => {
-		fetch( `https://dog.ceo/api/breed/${breed}/images/random/3`)
+		fetch( `https://dog.ceo/api/breed/${breed.URLFragment}/images/random/3`)
 			.then( response => response.json() )
 			.then( data => {
 				setImagesData( data.message );
@@ -47,13 +47,12 @@ export default function Breed( { breed, onBack }: BreedProps ) {
 
 	return(
 		<div className='breed-container'>
-			{ !isLoaded && <p><img src={loading} alt="loading"/></p> }
 			{ error && <p>{ error.message }</p>}
 			{
 				<div>
 					<div className='header-container'>
 					<button onClick={ onBack }><Back/></button>
-						<h1>{breed.toUpperCase()}</h1>
+						<h1>{breed.displayName.toUpperCase()}</h1>
 					</div>
 					<div className='images-container'>
 						<div className='buttons-container'>
@@ -61,7 +60,7 @@ export default function Breed( { breed, onBack }: BreedProps ) {
 							<button onClick={ ( ) => handleClick( 'next')}><Next/></button>
 						</div>
 						<div className='image-container'>
-							<img src={ imagesData[ imageIndex ] } alt={ breed }/>
+							<img src={ imagesData[ imageIndex ] } alt={ breed.displayName }/>
 						</div>
 					</div>
 				</div>

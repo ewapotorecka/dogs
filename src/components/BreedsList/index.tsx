@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Search from '../Search';
-import loading from '../../icons/480.gif';
+
 import './breeds-list.scss';
+import { breedInfo } from '../../interfaces/breedInfo';
 
 interface breeds {
 	[key: string]: string[];
 };
 
-interface breedInfo {
-	displayName: string,
-	URLFragment: string
-}
-
 interface BreedListProps {
-	onBreedChoice: ( breed: string ) => void;
+	onBreedChoice: ( breed: {displayName: string, URLFragment: string} ) => void;
 }
 
 export default function BreedsList( {onBreedChoice}: BreedListProps ){
-	const [ breedInfo, setBreedInfo ] = useState<breedInfo[]>([])!;
+	const [ breedsData, setBreedsData ] = useState<breedInfo[]>([])!;
 	const [ filteredBreeds, setFilteredBreeds ] = useState<breedInfo[]>([])!;
 	const [ isLoaded, setIsLoaded ] = useState( false );
 	const [ error, setError ] = useState<Error | null>( null );
@@ -53,13 +49,16 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 	}
 
 	const handleClick = ( e: React.MouseEvent<HTMLElement> ) => {
-		const clickedBreed = e.currentTarget.getAttribute( 'value' )!;
+		const selectedBreed = {
+			displayName: e.currentTarget.getAttribute( 'name' )!,
+			URLFragment: e.currentTarget.getAttribute( 'value' )!
+		}
 
-		onBreedChoice( clickedBreed );
+		onBreedChoice( selectedBreed );
 	}
 
 	const filterBreeds = ( phrase: string) => {
-		const result = breedInfo.filter( element => {
+		const result = breedsData.filter( element => {
 			return element.displayName.toLowerCase().startsWith( phrase.toLocaleLowerCase() )
 		} );
 
@@ -70,9 +69,9 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 		fetch( 'https://dog.ceo/api/breeds/list/all' )
 			.then( response => response.json() )
 			.then( data => createBreedsInfo( data.message ))
-			.then( breedsInfo => {
-				setBreedInfo(breedsInfo );
-				setFilteredBreeds(breedsInfo);
+			.then( breeds => {
+				setBreedsData(breeds );
+				setFilteredBreeds(breeds);
 				setIsLoaded( true );
 			} )
 			.catch( error => {
@@ -84,7 +83,7 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 	if ( error ) {
 		return <div>{ error.message }</div>
 	} else if ( !isLoaded ) {
-		return <div><img src={loading} alt="loading"/></div>
+		return <div></div>
 	} else  {
 
 		return (
@@ -94,7 +93,6 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 			 	<Search onChange={ filterBreeds }/>
 				<p>Click on a breed to see some lovely doggies</p>
 			  </div>
-			
 			<div className='breed-list'>
 				{filteredBreeds.map((breedInfo, index) => {
 				return (

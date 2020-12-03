@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
 import BreedsList from './components/BreedsList';
 import Breed from './components/Breed';
+import { breedInfo } from './interfaces/breedInfo';
 import './App.scss';
 
 function App() {
-	const [ selectedBreed, setSelectedBreed ] = useState( '' );
+	const [ selectedBreed, setSelectedBreed ] = useState<breedInfo | { displayName: null, URLFragment: null}>({ displayName: null, URLFragment: null });
 
 	return (
 		<div>
-			{ selectedBreed && <Breed breed={ selectedBreed} onBack={ () => setSelectedBreed('')}  /> }
-			{ !selectedBreed && <BreedsList onBreedChoice={ setSelectedBreed } />}
+			{ selectedBreed.displayName && <Breed breed={ selectedBreed } onBack={ () => setSelectedBreed({ displayName: null, URLFragment: null })}  /> }
+			{ !selectedBreed.displayName && <BreedsList onBreedChoice={ setSelectedBreed } />}
 
 		</div>
-	
-		
 	)
-	// if ( selectedBreed ) {
-	// 	return <Breed breed={ selectedBreed} onBack={ () => setSelectedBreed('')}/>
-	// } else {
-	// 	return <BreedsList onBreedChoice={setSelectedBreed}/>
-	// }
 }
 
 export default App;
