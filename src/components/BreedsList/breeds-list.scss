@@ -1,8 +1,8 @@
 
-$light-blue: #3498db;
+$green: #1abc9c;
 $main-font: 'Nerko One', cursive;
 $secondary-font: 'Montserrat', sans-serif;
-@use 'base';
+
 
 .breed-list-container {
 	display: flex;
@@ -17,7 +17,7 @@ $secondary-font: 'Montserrat', sans-serif;
 	font-family: 'Nerko One', cursive;
 	font-size: 1.2em;
     position: fixed;
-	background-color: $light-blue;
+	background-color: $green;
 	input {
 		margin: 10px auto;
 		font-size: 0.8em;
@@ -36,7 +36,8 @@ $secondary-font: 'Montserrat', sans-serif;
 
 .breed-list {
 	width: 90vw;
-	margin:250px auto 10px auto ;
+	padding-top: 250px;
+	margin: 0 auto;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-around;
@@ -54,11 +55,11 @@ $secondary-font: 'Montserrat', sans-serif;
 		height: 70px;
 		padding: 10px 40px;
 		background-color: white;
-		border: 3px solid $light-blue;
+		border: 3px solid $green;
 		border-radius: 25px;
 	}
 	button:hover {
-		background-color: $light-blue;
+		background-color: $green;
 		color: white;
 	}
 }

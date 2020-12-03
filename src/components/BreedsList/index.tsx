@@ -90,16 +90,16 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 		return (
 		  <div className='breed-list-container'>
 			  <div className='search-container'>
-				  <h1>Welcome to doggie search</h1>
-			 	 <Search onChange={ filterBreeds }/>
-				  <p>Click on a breed to see some lovely doggies</p>
+				<h1>Welcome to doggie search</h1>
+			 	<Search onChange={ filterBreeds }/>
+				<p>Click on a breed to see some lovely doggies</p>
 			  </div>
 			
 			<div className='breed-list'>
 				{filteredBreeds.map((breedInfo, index) => {
 				return (
 					<div key={index} className='breed-button-container'>
-						<button onClick={ handleClick } value={ breedInfo.URLFragment }>{breedInfo.displayName}</button>
+						<button onClick={ handleClick } value={ breedInfo.URLFragment } name={breedInfo.displayName}>{breedInfo.displayName}</button>
 					</div>
 				);
 				})}

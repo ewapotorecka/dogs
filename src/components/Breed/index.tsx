@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import loading from '../../icons/480.gif';
+import { ReactComponent as Back } from '../../icons/return.svg';
+import { ReactComponent as Next } from '../../icons/next.svg';
+import { ReactComponent as Prev } from '../../icons/prev.svg';
+import './breed.scss';
 
 type BreedProps = {
 	breed: string,
@@ -10,6 +14,23 @@ export default function Breed( { breed, onBack }: BreedProps ) {
 	const [ imagesData, setImagesData ] = useState<string[]>( [] );
 	const [ isLoaded, setIsLoaded ] = useState( false );
 	const [ error, setError ] = useState<Error | null>( null );
+	const [ imageIndex, setImageIndex ] = useState( 0 );
+
+	const handleClick = ( type: string ): any => {
+		if ( type === 'next' ) {
+			if ( imageIndex === 2 ) {
+				setImageIndex( 0 );
+			} else {
+				setImageIndex( imageIndex + 1 );
+			}
+		} else {
+			if ( imageIndex === 0 ) {
+				setImageIndex( 2 );
+			} else {
+				setImageIndex( imageIndex - 1);
+			}
+		}
+	}
 
 	useEffect( () => {
 		fetch( `https://dog.ceo/api/breed/${breed}/images/random/3`)
@@ -25,15 +46,24 @@ export default function Breed( { breed, onBack }: BreedProps ) {
 	}, [] );
 
 	return(
-		<div>
+		<div className='breed-container'>
 			{ !isLoaded && <p><img src={loading} alt="loading"/></p> }
 			{ error && <p>{ error.message }</p>}
 			{
 				<div>
-					<button onClick={ onBack }>Back to breeds list</button>
-					<img src={ imagesData[ 0 ] } alt={ breed }/>
-					<img src={ imagesData[ 1 ] } alt={ breed }/>
-					<img src={ imagesData[ 2 ] } alt={ breed }/>
+					<div className='header-container'>
+					<button onClick={ onBack }><Back/></button>
+						<h1>{breed.toUpperCase()}</h1>
+					</div>
+					<div className='images-container'>
+						<div className='buttons-container'>
+							<button onClick={ ( ) => handleClick( 'prev' ) }><Prev/></button>
+							<button onClick={ ( ) => handleClick( 'next')}><Next/></button>
+						</div>
+						<div className='image-container'>
+							<img src={ imagesData[ imageIndex ] } alt={ breed }/>
+						</div>
+					</div>
 				</div>
 			}
 		</div>
