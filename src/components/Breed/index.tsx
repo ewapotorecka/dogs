@@ -12,11 +12,10 @@ type BreedProps = {
 
 export default function Breed( { breed, onBack }: BreedProps ) {
 	const [ imagesData, setImagesData ] = useState<string[]>( [] );
-	const [ isLoaded, setIsLoaded ] = useState( false );
 	const [ error, setError ] = useState<Error | null>( null );
 	const [ imageIndex, setImageIndex ] = useState( 0 );
 
-	const handleClick = ( type: string ): any => {
+	const handleClick = ( type: string ): void => {
 		if ( type === 'next' ) {
 			if ( imageIndex === 2 ) {
 				setImageIndex( 0 );
@@ -37,18 +36,16 @@ export default function Breed( { breed, onBack }: BreedProps ) {
 			.then( response => response.json() )
 			.then( data => {
 				setImagesData( data.message );
-				setIsLoaded( true );
 			} )
 			.catch( error => {
 				setError( error );
-				setIsLoaded( true );
 			} )
-	}, [] );
+	}, [ breed ] );
 
 	return(
 		<div className='breed-container'>
 			{ error && <p>{ error.message }</p>}
-			{
+			{ !error &&
 				<div>
 					<div className='header-container'>
 					<button onClick={ onBack }><Back/></button>

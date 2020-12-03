@@ -14,7 +14,7 @@ interface BreedListProps {
 
 export default function BreedsList( {onBreedChoice}: BreedListProps ){
 	const [ breedsData, setBreedsData ] = useState<breedInfo[]>([])!;
-	const [ filteredBreeds, setFilteredBreeds ] = useState<breedInfo[]>([])!;
+	const [ filteredBreedsData, setFilteredBreedsData ] = useState<breedInfo[]>([])!;
 	const [ isLoaded, setIsLoaded ] = useState( false );
 	const [ error, setError ] = useState<Error | null>( null );
 
@@ -31,7 +31,7 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 		return subBreedInfo;
 	};
 
-	const createBreedsInfo = ( data: breeds ) => {
+	const convertBreedsData = ( data: breeds ) => {
 		const breedsInfo: breedInfo[] = [];
 
 		for (const dogBreed in data) {
@@ -59,19 +59,26 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 
 	const filterBreeds = ( phrase: string) => {
 		const result = breedsData.filter( element => {
-			return element.displayName.toLowerCase().startsWith( phrase.toLocaleLowerCase() )
+			if ( element.displayName.includes( ' ' ) ) {
+				const subBreedName = element.displayName.substring( 0, element.displayName.indexOf(' ' ) - 1 );
+				const breedName = element.displayName.substring( element.displayName.indexOf(' ') + 1, element.displayName.length );
+
+				return ( breedName.toLocaleLowerCase().startsWith( phrase.toLocaleLowerCase() )|| subBreedName.toLowerCase().startsWith( phrase.toLocaleLowerCase() ) )
+			} else {
+				return element.displayName.toLowerCase().startsWith( phrase.toLocaleLowerCase() )
+			}
 		} );
 
-		setFilteredBreeds( result );
+		setFilteredBreedsData( result );
 	}
 
 	useEffect( () => {
 		fetch( 'https://dog.ceo/api/breeds/list/all' )
 			.then( response => response.json() )
-			.then( data => createBreedsInfo( data.message ))
+			.then( data => convertBreedsData( data.message ))
 			.then( breeds => {
 				setBreedsData(breeds );
-				setFilteredBreeds(breeds);
+				setFilteredBreedsData(breeds);
 				setIsLoaded( true );
 			} )
 			.catch( error => {
@@ -94,7 +101,7 @@ export default function BreedsList( {onBreedChoice}: BreedListProps ){
 				<p>Click on a breed to see some lovely doggies</p>
 			  </div>
 			<div className='breed-list'>
-				{filteredBreeds.map((breedInfo, index) => {
+				{filteredBreedsData.map((breedInfo, index) => {
 				return (
 					<div key={index} className='breed-button-container'>
 						<button onClick={ handleClick } value={ breedInfo.URLFragment } name={breedInfo.displayName}>{breedInfo.displayName}</button>
