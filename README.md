@@ -2,7 +2,7 @@
 
 Application using [dog API](https://dog.ceo/dog-api/).
 
-## Comonents:
+## Components:
 
 ### Breed list with search
 A component, that displays dog breeds list.
