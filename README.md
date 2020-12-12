@@ -6,8 +6,8 @@ Application using [dog API](https://dog.ceo/dog-api/).
 
 ### Breed list with search
 A component, that displays dog breeds list.
-When a user types breed name breed list shows search results.
-When a user clicks on a breed name, selected breed component is rendered.
+- When a user types breed name breed list shows search results.
+- When a user clicks on a breed name, selected breed component is rendered.
 
 ### Selected breed
 Component, that show one of three random photos of the selected breed.
