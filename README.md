@@ -1,4 +1,19 @@
-# Getting Started with Create React App
+# Doggie search
+
+Application using [dog API](https://dog.ceo/dog-api/).
+
+## Comonents:
+
+### Breed list with search
+A component, that displays dog breeds list.
+When a user types breed name breed list shows search results.
+When a user clicks on a breed name, selected breed component is rendered.
+
+### Selected breed
+Component, that show one of three random photos of the selected breed.
+A user can shwitch photos by clicking on a button (previous and next).
+
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
